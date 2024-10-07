@@ -1,0 +1,74 @@
+
+@font-face {
+  font-family: 'ChalkBig';
+  src: url('/fonts/Chalkboy.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ChalkSmall';
+  src: url('/fonts/GH.ttf') format('truetype');
+  font-weight: normal;
+  font-style: bold;
+}
+html{
+  background-color: rgb(46, 46, 46);  
+  color:  rgb(245,245,245);
+}
+body {
+  margin: 0;
+  font-family: 'ChalkSmall', cursive;
+  font-size: 1rem;
+}
+h1 {
+  font-family: 'ChalkBig', monospace;
+  font-size: 8rem;
+  margin-bottom: 2rem;
+  margin-top: 0;
+}
+h2{
+  font-family: 'ChalkBig', monospace;
+  font-size: 3rem;
+  margin-left: 3rem;
+  margin-bottom: 0;
+}
+
+.title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.project-wapper{
+  margin: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: flex;
+  justify-content: center;
+  max-width: 50rem;
+}
+wired-toggle{
+  --wired-toggle-off-color:rgb(161, 161, 161);  
+  --wired-toggle-on-color: rgb(245,245,245);
+}
+wired-link{
+  --wired-link-decoration-color: rgba(245, 245, 245, 0);
+}
+wired-card{
+  padding: 1;
+}
+canvas{
+  margin: -0.25rem;
+  margin-bottom: -0.75rem;
+}
+
+/* Project Links */
+.Project{
+  position: absolute;
+  left: 25%;
+  top: 25%;
+  -webkit-transform: translate(-25%, -25%);
+  transform: translate(-25%, -25%);
+  rotate: -45deg;
+}
