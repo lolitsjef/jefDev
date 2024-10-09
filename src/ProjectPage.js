@@ -2,7 +2,28 @@ import React from 'react';
 import './styles.css';
 import "wired-elements";
 import Canvas from './Canvas';
+import rough from 'roughjs/bundled/rough.esm.js';
+
 function App() {
+
+  const chalk = 'rgb(245,245,245)';
+  const draw = (context, count) => {
+    context.clearRect(0,0, context.canvas.width, context.canvas.height)
+    context.fillStyle = chalk;
+    const rc = rough.canvas(context.canvas);
+    const delta = count * 0.1 % 800;
+
+    rc.rectangle(10 + delta, 50, 100, 100, {
+      roughness: 1,
+      strokeWidth: 3,
+      stroke: chalk,
+      fill: chalk, 
+      hachureAngle: 60, 
+      hachureGap: 10
+    });
+  }
+
+
   return (
     <div>
       <wired-link href="/">
@@ -14,9 +35,9 @@ function App() {
             <h5>October 6, 2024</h5>
 
             {/* Canvas */}
-            <wired-card elevation="1" roughness = "5">
-            <Canvas width = "800" height = "400"/>           
-        </wired-card>
+            <wired-card elevation="3" roughness = "1">
+            <Canvas draw = {draw} width = "800" height = "400"/>           
+            </wired-card>
 
 
             {/* Toggles and inputs for project */}
