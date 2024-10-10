@@ -1,5 +1,8 @@
-import { render } from "@testing-library/react";
 import { useEffect, useRef } from "react"
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 const Canvas = props => {
     const {draw, ...rest} = props;
@@ -11,9 +14,10 @@ const Canvas = props => {
         let count = 0;
         let animationID;
 
-        const renderer = () => {
+        const renderer = async () => {
            count++;
            draw(context, count);
+           await sleep(100);
            animationID = window.requestAnimationFrame(renderer);
         }
         renderer()
