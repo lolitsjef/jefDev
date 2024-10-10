@@ -6,43 +6,11 @@ import rough from 'roughjs/bundled/rough.esm.js';
 
 function App() {
 
-
-  const pxSize = 50;
   const chalk = 'rgb(245,245,245)';
-  var iterations = 0;
 
   const draw = async (context, count) => {
     context.clearRect(0,0, context.canvas.width, context.canvas.height)
     const rc = rough.canvas(context.canvas);
-
-    const w = context.canvas.width / pxSize;
-    const h = context.canvas.height / pxSize;
-
-    for(var k = 0; k < w; k++){
-      rc.line(k*pxSize, 0, k*pxSize, context.canvas.height, 
-        {
-        stroke: chalk,
-        roughness: 0,
-        }); // x1, y1, x2, y2
-    }
-
-    for(k = 0; k < h; k++){
-      rc.line(0, k*pxSize, context.canvas.width, k*pxSize, 
-        {
-        stroke: chalk,
-        roughness: 0,
-        }); // x1, y1, x2, y2
-    }
-
-    rc.rectangle(0, Math.min(iterations*pxSize, (h-1)*pxSize), pxSize, pxSize,
-      {
-        stroke: chalk,
-        fill: chalk,
-        fillWeight: 2,
-        strokeWeight: 2,
-      }
-    );
-    iterations++;
   }
 
 
