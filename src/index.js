@@ -5,13 +5,14 @@ import "wired-elements";
 import './styles.css';
 import Homepage from './Homepage';
 import Project from './ProjectPage';
+import FallingSand from './FallingSand';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 <Router>
     <Routes>
       <Route path="/" element={<Homepage />} />
-      <Route path="/project" element={<Project />} />
+      <Route path="/FallingSand" element={<FallingSand />} />
     </Routes>
   </Router>,);
 
