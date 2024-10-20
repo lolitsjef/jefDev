@@ -5,7 +5,7 @@ function sleep(ms) {
 }
 
 const Canvas = props => {
-    const {draw, ...rest} = props;
+    const {draw, sleepDuration = 100, ...rest} = props;
     const ref = useRef();
 
     useEffect(() => {
@@ -17,12 +17,12 @@ const Canvas = props => {
         const renderer = async () => {
            count++;
            draw(context, count);
-           await sleep(100);
+           await sleep(sleepDuration);
            animationID = window.requestAnimationFrame(renderer);
         }
         renderer()
         return () => window.cancelAnimationFrame(animationID);
-    }, [draw])
+    }, [draw, sleepDuration])
 
 
     return <canvas ref = {ref} {...rest}/>

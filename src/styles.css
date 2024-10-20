@@ -48,9 +48,21 @@ h2{
   justify-content: center;
   max-width: 50rem;
 }
+.controls{
+  padding: 0.5rem;
+}
+
+wired-button{
+  margin-right:1rem;
+}
 wired-toggle{
   --wired-toggle-off-color:rgb(161, 161, 161);  
   --wired-toggle-on-color: rgb(245,245,245);
+}
+wired-slider{
+  --wired-slider-knob-zero-color: rgb(245,245,245);
+  --wired-slider-knob-color: rgb(245,245,245);
+  --wired-slider-bar-color: rgb(245,245,245);
 }
 wired-link{
   --wired-link-decoration-color: rgba(245, 245, 245, 0);
@@ -61,6 +73,7 @@ wired-card{
 canvas{
   margin: -0.25rem;
   margin-bottom: -0.75rem;
+  cursor: none;
 }
 
 /* Project Links */
