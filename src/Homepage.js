@@ -6,11 +6,11 @@ function App() {
   return (
       <main>
           <wired-link href="/FallingSand" class = "FallingSand">
-          <h2>Project</h2>
+            <h2>Falling Sand</h2>
           </wired-link>
-          <div class = "title">
+          <wired-link href="https://www.youtube.com/@jefDev" class = "title">
             <h1>jefDev</h1>
-          </div>
+          </wired-link>
         </main>    
   );
 }

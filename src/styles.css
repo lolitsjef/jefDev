@@ -39,6 +39,11 @@ h2{
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+  transition: transform 0.1s ease-in-out;
+  cursor: pointer;
+}
+.title:hover{
+  transform: translate(-50%, -50%) scale(1.1); /* Add scaling while preserving translation and rotation */
 }
 .project-wapper{
   margin: auto;
@@ -77,11 +82,23 @@ canvas{
 }
 
 /* Project Links */
-.Project{
+.FallingSand{
   position: absolute;
   left: 25%;
   top: 25%;
   -webkit-transform: translate(-25%, -25%);
   transform: translate(-25%, -25%);
-  rotate: -45deg;
+  rotate: -30deg;
+  transition: transform 0.1s ease-in-out;
+}
+
+.FallingSand:hover{
+  transform: translate(-25%, -25%) scale(1.1); /* Add scaling while preserving translation and rotation */
+}
+
+.backLink{
+  transition: transform 0.1s ease-in-out;
+}
+.backLink:hover{
+  transform: scale(1.1); /* Add scaling while preserving translation and rotation */
 }

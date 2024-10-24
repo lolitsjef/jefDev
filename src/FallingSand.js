@@ -15,6 +15,26 @@ function App() {
   const mousePosition = { x: 0, y: 0, screenX: 0, screenY: 0};
 
   var buckets = Array.from({ length: w }, () => Array(h).fill(0));
+
+  const initializeMounds = () => {
+    const centerXStart = Math.floor(w / 3);
+    const centerXEnd = Math.floor(2 * w / 3);
+    const centerYStart = Math.floor(h / 3);
+    const centerYEnd = Math.floor(2 * h / 3);
+
+    for (let x = centerXStart; x < centerXEnd; x++) 
+    {
+      for (let y = centerYStart; y < centerYEnd; y++) 
+      {
+        if (Math.random() > 0.5) 
+        { 
+          buckets[x][y] = 1;
+        }
+      }
+    }
+  };
+  initializeMounds(); 
+
   const reset = () => 
   {
     buckets = Array.from({ length: w }, () => Array(h).fill(0));
@@ -133,8 +153,8 @@ function App() {
 
   return (
     <div>
-      <wired-link href="/">
-        <h2>jefdev</h2>
+      <wired-link href="/" class = "backLink">
+        <h2>jefDev</h2>
       </wired-link>
       <div className="project-wapper">
         <main>
@@ -164,11 +184,22 @@ function App() {
           </section>
 
           {/* Links */}
-          <section></section>
+          <section>
+          <wired-card>
+            <wired-link href="https://github.com/lolitsjef/jefDev/blob/main/src/FallingSand.js">Source Code</wired-link>
+          </wired-card>
+          <wired-card>
+            <wired-link href="https://youtu.be/5MWUf2b7UkY?si=BvHsa6XuVzRRiSDI">YouTube Video</wired-link>
+          </wired-card>
+          </section>
 
           {/* Small project writeup */}
           <section>
-            <p></p>
+            <p>
+              A simple project to simulate falling sand. Click and drag to spawn sand. Press "Reset" to clear all sand.
+              Use the slider to change the steepness of the piles created by the sand. This project was inspired by 
+              The Coding Train and Jason McGhee.
+            </p>
           </section>
         </main>
       </div>
