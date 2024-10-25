@@ -11,7 +11,7 @@ function App() {
   let sounds = []; 
   let lastSoundTime = 0; 
 
-  var grainSize = 8;
+  var grainSize = 20;
   const w = 720 / grainSize;
   const h = 1280 / grainSize;
   var depth = 5;
@@ -205,13 +205,12 @@ function App() {
       <div className="project-wapper">
         <main>
           <h1>Falling Sand</h1>
-          <h5>October 13, 2024</h5>
 
           {/* Canvas */}
           <wired-card elevation="3" roughness="1">
             <Canvas 
               draw={draw} 
-              sleepDuration = {8}
+              sleepDuration = {0}
               width="720" 
               height="1280"
               onMouseDown={handleMouseDown}
