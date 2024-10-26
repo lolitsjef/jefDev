@@ -3,11 +3,14 @@ import './styles.css';
 import "wired-elements";
 import Canvas from './Canvas';
 import rough from 'roughjs/bundled/rough.esm.js';
+import st from 'roughjs/bundled/rough.esm.js';
 
 function App() {
   const chalk = 'rgb(245,245,245)';
   const green = 'rgb(175, 225, 175)';
   const red = 'rgb(170, 74, 68)';
+  const blue = 'rgb(137, 207, 240)';
+
 
   var grainSize = 80;
   const w = 800 / grainSize;
@@ -16,37 +19,61 @@ function App() {
   let isDragging = false;
   const mousePosition = { x: 0, y: 0, screenX: 0, screenY: 0};
 
+  let solve = false;
+  const setSolve = () => 
+    {
+      solve = true;
+    }
+
   var buckets = Array.from({ length: w }, () => Array(h).fill(0));
   let start = {x: 0, y: 0};
   let end = {x: w-1, y: h-1};
+  buckets[start.x][start.y] = 2;
+  buckets[end.x][end.y] = 3;
   const reset = () => 
   {
     buckets = Array.from({ length: w }, () => Array(h).fill(0));
+    buckets[start.x][start.y] = 2;
+    buckets[end.x][end.y] = 3;
   }
 
-  buckets[start.x][start.y] = 2;
-  buckets[end.x][end.y] = 3;
 
-  class Queue {
-    constructor() {
+
+  class Queue 
+  {
+    constructor() 
+    {
       this.items = {};
       this.frontIndex = 0;
       this.backIndex = 0;
     }
-    push(item) {
+    push(item)
+    {
       this.items[this.backIndex] = item;
-      this.backIndex++;
+      this.backIndex++
     }
-    pop() {
-      const item = this.items[this.frontIndex];
+    pop()
+    {
+      if(this.frontIndex === this.backIndex) return null;
+      const item = this.items[this.frontIndex]
       delete this.items[this.frontIndex];
-      this.frontIndex++;
+      this.frontIndex++
       return item;
+    }
+    isEmpty()
+    {
+      return this.frontIndex === this.backIndex;
     }
   }
 
   let toVisit = new Queue();
   toVisit.push(start);
+
+
+  
+  
+
+
 
 
 
@@ -57,12 +84,37 @@ function App() {
     const rc = rough.canvas(context.canvas);
 
 
-    // Create Walls
-    if (isDragging) 
+    // Solve Maze
+    if(!toVisit.isEmpty() && solve)
     {
-      if (mousePosition.x >= 0 && mousePosition.x < w && mousePosition.y >= 0 && mousePosition.y < h) 
+      let current = toVisit.pop();
+
+      //check down
+      if(current.y + 1 < h && buckets[current.x][current.y+1] === 0)
       {
-        buckets[mousePosition.x][mousePosition.y] = 1;
+        toVisit.push({x:current.x, y:current.y+1});
+        buckets[current.x][current.y+1] = 1;
+      }
+
+      //check right
+      if(current.x+1 < w && buckets[current.x+1][current.y] === 0)
+      {
+        toVisit.push({x:current.x+1, y:current.y});
+        buckets[current.x+1][current.y] = 1
+      }
+
+      //check up
+      if(current.y-1 >= 0 && buckets[current.x][current.y-1] === 0)
+      {
+        toVisit.push({x:current.x, y:current.y-1});
+        buckets[current.x][current.y-1] = 1;
+      }
+
+      //check left
+      if(current.x-1 >=0 && buckets[current.x-1][current.y] === 0)
+      {
+        toVisit.push({x:current.x-1, y:current.y});
+        buckets[current.x-1][current.y] = 1;
       }
     }
 
@@ -71,7 +123,6 @@ function App() {
 
 
 
-    // Solve Maze
 
 
 
@@ -85,9 +136,15 @@ function App() {
 
 
 
+    // Create Walls
+    if (isDragging) 
+    {
+      if (mousePosition.x >= 0 && mousePosition.x < w && mousePosition.y >= 0 && mousePosition.y < h) 
+      {
+        buckets[mousePosition.x][mousePosition.y] = -1;
+      }
+    }
 
-
-    // Draw to canvas
     // Draw to canvas
     for (let x = 0; x < w; x++) 
       {
@@ -96,7 +153,7 @@ function App() {
           if (buckets[x][y] === 1) 
           {
             rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
-              fill: chalk,
+              fill: blue,
               fillWeight: 2,
               hachureGap: 3,
               roughness: 1,
@@ -123,6 +180,16 @@ function App() {
               stroke: chalk,
             });
           }
+          else if (buckets[x][y] === -1) 
+            {
+              rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
+                fill: chalk,
+                fillWeight: 2,
+                hachureGap: 3,
+                roughness: 1,
+                stroke: chalk,
+              });
+            }
           else
           {
             rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
@@ -198,6 +265,7 @@ function App() {
           <section>
             <div className = "controls">
             <wired-button onClick = {reset}>Reset</wired-button>
+            <wired-button onClick = {setSolve}>Solve</wired-button>
             <wired-slider id = "grainSlider" value = "2" min = "1" max = "10"> </wired-slider>
             </div>
 
