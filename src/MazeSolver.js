@@ -20,25 +20,13 @@ function App() {
   const mousePosition = { x: 0, y: 0, screenX: 0, screenY: 0};
 
   let solve = false;
+  let solved = false;
   const setSolve = () => 
-    {
-      solve = true;
-    }
-
-  var buckets = Array.from({ length: w }, () => Array(h).fill(0));
-  let start = {x: 0, y: 0};
-  let end = {x: w-1, y: h-1};
-  buckets[start.x][start.y] = 2;
-  buckets[end.x][end.y] = 3;
-  const reset = () => 
   {
-    buckets = Array.from({ length: w }, () => Array(h).fill(0));
-    buckets[start.x][start.y] = 2;
-    buckets[end.x][end.y] = 3;
+    solve = true;
   }
 
-
-
+  // Queue to store nodes to visit
   class Queue 
   {
     constructor() 
@@ -65,17 +53,28 @@ function App() {
       return this.frontIndex === this.backIndex;
     }
   }
+  let start = {x: 0, y: 0};
+  let end = {x: w-1, y: h-1};
 
   let toVisit = new Queue();
   toVisit.push(start);
-
-
-  
   
 
+  // Array to store progress
+  var buckets = Array.from({ length: w }, () => Array(h).fill(0));
 
-
-
+  buckets[start.x][start.y] = 2;
+  buckets[end.x][end.y] = 3;
+  const reset = () => 
+  {
+    buckets = Array.from({ length: w }, () => Array(h).fill(0));
+    buckets[start.x][start.y] = 2;
+    buckets[end.x][end.y] = 3;
+    toVisit = new Queue();
+    toVisit.push(start);
+    solve = false;
+    solved = false;
+  }
 
   
   const draw = async (context, count) => 
@@ -85,7 +84,7 @@ function App() {
 
 
     // Solve Maze
-    if(!toVisit.isEmpty() && solve)
+    if(!toVisit.isEmpty() && solve && !solved)
     {
       let current = toVisit.pop();
 
@@ -115,6 +114,28 @@ function App() {
       {
         toVisit.push({x:current.x-1, y:current.y});
         buckets[current.x-1][current.y] = 1;
+      }
+
+
+      //Look for solve
+      if(current.y + 1 < h && buckets[current.x][current.y+1] === 3)
+      {
+        solved = true;
+      }
+
+      if(current.x+1 < w && buckets[current.x+1][current.y] === 3)
+      {
+        solved = true;
+      }
+
+      if(current.y-1 >= 0 && buckets[current.x][current.y-1] === 3)
+      {
+        solved = true;
+      }
+
+      if(current.x-1 >=0 && buckets[current.x-1][current.y] === 3)
+      {
+        solved = true;
       }
     }
 
