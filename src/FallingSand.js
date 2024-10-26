@@ -11,9 +11,9 @@ function App() {
   let sounds = []; 
   let lastSoundTime = 0; 
 
-  var grainSize = 20;
-  const w = 720 / grainSize;
-  const h = 1280 / grainSize;
+  var grainSize = 10;
+  const w = 800 / grainSize;
+  const h = 400 / grainSize;
   var depth = 5;
   let isDragging = false;
   let soundEnabled = false;
@@ -211,8 +211,8 @@ function App() {
             <Canvas 
               draw={draw} 
               sleepDuration = {0}
-              width="720" 
-              height="1280"
+              width="800" 
+              height="400"
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
