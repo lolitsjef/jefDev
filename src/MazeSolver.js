@@ -12,9 +12,10 @@ function App() {
   const blue = 'rgb(137, 207, 240)';
 
 
-  var grainSize = 80;
-  const w = 800 / grainSize;
-  const h = 400 / grainSize;
+  var grainSize = 40;
+  
+  let w = 800 / grainSize;
+  let h = 400 / grainSize;
 
   let isDragging = false;
   const mousePosition = { x: 0, y: 0, screenX: 0, screenY: 0};
@@ -25,7 +26,6 @@ function App() {
   {
     solve = true;
   }
-
   // Queue to store nodes to visit
   class Queue 
   {
@@ -59,6 +59,7 @@ function App() {
   let toVisit = new Queue();
   toVisit.push(start);
   
+  let dict = new Object();
 
   // Array to store progress
   var buckets = Array.from({ length: w }, () => Array(h).fill(0));
@@ -67,7 +68,13 @@ function App() {
   buckets[end.x][end.y] = 3;
   const reset = () => 
   {
+    handleSliderChange();
+    w = 800 / grainSize;
+    h = 400 / grainSize;
+    isDragging = false;
     buckets = Array.from({ length: w }, () => Array(h).fill(0));
+    start = {x: 0, y: 0};
+    end = {x: w-1, y: h-1};
     buckets[start.x][start.y] = 2;
     buckets[end.x][end.y] = 3;
     toVisit = new Queue();
@@ -93,13 +100,15 @@ function App() {
       {
         toVisit.push({x:current.x, y:current.y+1});
         buckets[current.x][current.y+1] = 1;
+        dict[`${current.x},${current.y+1}`] = {x:current.x, y:current.y};
       }
 
       //check right
       if(current.x+1 < w && buckets[current.x+1][current.y] === 0)
       {
         toVisit.push({x:current.x+1, y:current.y});
-        buckets[current.x+1][current.y] = 1
+        buckets[current.x+1][current.y] = 1;
+        dict[`${current.x+1},${current.y}`] = {x:current.x, y:current.y};
       }
 
       //check up
@@ -107,6 +116,7 @@ function App() {
       {
         toVisit.push({x:current.x, y:current.y-1});
         buckets[current.x][current.y-1] = 1;
+        dict[`${current.x},${current.y-1}`] = {x:current.x, y:current.y};
       }
 
       //check left
@@ -114,48 +124,58 @@ function App() {
       {
         toVisit.push({x:current.x-1, y:current.y});
         buckets[current.x-1][current.y] = 1;
+        dict[`${current.x-1},${current.y}`] = {x:current.x, y:current.y};
       }
+
+      console.log(dict);
 
 
       //Look for solve
       if(current.y + 1 < h && buckets[current.x][current.y+1] === 3)
       {
+        dict[`${current.x},${current.y+1}`] = {x:current.x, y:current.y};
         solved = true;
       }
 
       if(current.x+1 < w && buckets[current.x+1][current.y] === 3)
       {
         solved = true;
+        dict[`${current.x+1},${current.y}`] = {x:current.x, y:current.y};
       }
 
       if(current.y-1 >= 0 && buckets[current.x][current.y-1] === 3)
       {
+        dict[`${current.x},${current.y-1}`] = {x:current.x, y:current.y};
         solved = true;
       }
 
       if(current.x-1 >=0 && buckets[current.x-1][current.y] === 3)
       {
+        dict[`${current.x-1},${current.y}`] = {x:current.x, y:current.y};
         solved = true;
       }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Show Solution
+    if(solved && !(end.x === start.x && end.y === start.y) && solve)
+    {
+      buckets[end.x][end.y] = 2;
+      end = dict[`${end.x},${end.y}`];
+    }
+    else if(toVisit.isEmpty())
+    {
+      for (let x = 0; x < w; x++) 
+      {
+        for (let y = 0; y < h; y++) 
+        {
+          if(buckets[x][y] === 1)
+          {
+            buckets[x][y] = 3;
+            break;
+          }
+        }
+      }
+    }
 
     // Create Walls
     if (isDragging) 
@@ -168,73 +188,93 @@ function App() {
 
     // Draw to canvas
     for (let x = 0; x < w; x++) 
+    {
+      for (let y = 0; y < h; y++) 
       {
-        for (let y = 0; y < h; y++) 
+        if (buckets[x][y] === 1) 
         {
-          if (buckets[x][y] === 1) 
+          rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
+            fill: blue,
+            fillWeight: 2,
+            hachureGap: 3,
+            roughness: 1,
+            stroke: chalk,
+          });
+        }
+        else if (buckets[x][y] === 2) 
+        {
+          rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
+            fill: green,
+            fillWeight: 2,
+            hachureGap: 3,
+            roughness: 1,
+            stroke: chalk,
+          });
+        }
+        else if (buckets[x][y] === 3) 
+        {
+          rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
+            fill: red,
+            fillWeight: 2,
+            hachureGap: 3,
+            roughness: 1,
+            stroke: chalk,
+          });
+        }
+        else if (buckets[x][y] === -1) 
           {
             rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
-              fill: blue,
+              fill: chalk,
               fillWeight: 2,
               hachureGap: 3,
               roughness: 1,
               stroke: chalk,
             });
           }
-          else if (buckets[x][y] === 2) 
-          {
-            rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
-              fill: green,
-              fillWeight: 2,
-              hachureGap: 3,
-              roughness: 1,
-              stroke: chalk,
-            });
-          }
-          else if (buckets[x][y] === 3) 
-          {
-            rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
-              fill: red,
-              fillWeight: 2,
-              hachureGap: 3,
-              roughness: 1,
-              stroke: chalk,
-            });
-          }
-          else if (buckets[x][y] === -1) 
-            {
-              rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
-                fill: chalk,
-                fillWeight: 2,
-                hachureGap: 3,
-                roughness: 1,
-                stroke: chalk,
-              });
-            }
-          else
-          {
-            rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
-              roughness: 2,
-              stroke: chalk,
-            });
-          }
+        else
+        {
+          rc.rectangle(x * grainSize, grainSize * y, grainSize, grainSize, {
+            roughness: 2,
+            stroke: chalk,
+          });
         }
       }
+    }
 
+    // Draw Mouse
     if (mousePosition.screenX > 5 && mousePosition.screenX < 795 && mousePosition.screenY > 5 && mousePosition.screenY < 395) 
-      {
-        rc.circle(mousePosition.screenX, mousePosition.screenY, grainSize*3/4, {
-          fill: chalk,
-          stroke: chalk,
-          hachureGap: 3,
-          roughness: 1,
-          strokeWidth: 3,
-        });
-      }
+    {
+      rc.circle(mousePosition.screenX, mousePosition.screenY, grainSize*3/4, {
+        fill: chalk,
+        stroke: chalk,
+        hachureGap: 3,
+        roughness: 1,
+        strokeWidth: 3,
+      });
+    }
       
 
   };
 
+
+  const handleSliderChange = () =>
+  {
+    const temp = parseInt(document.getElementById("grainSlider").value, 20); 
+    switch(temp)
+    {
+      case 1:
+        grainSize = 20;
+        break;
+      case 2:
+        grainSize = 40;
+        break;
+      case 3:
+        grainSize = 80;
+        break;
+      default:
+        grainSize = 80;
+    }
+  }
   const handleMouseDown = (e) => 
   {
     isDragging = true;
@@ -287,7 +327,7 @@ function App() {
             <div className = "controls">
             <wired-button onClick = {reset}>Reset</wired-button>
             <wired-button onClick = {setSolve}>Solve</wired-button>
-            <wired-slider id = "grainSlider" value = "2" min = "1" max = "10"> </wired-slider>
+            <wired-slider change = {reset} id = "grainSlider" value = "2" min = "1" max = "3"></wired-slider>
             </div>
 
           </section>
