@@ -89,11 +89,11 @@ function App() {
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     const rc = rough.canvas(context.canvas);
 
-
     // Solve Maze
     if(!toVisit.isEmpty() && solve && !solved)
     {
       let current = toVisit.pop();
+      solve = false;
 
       //check down
       if(current.y + 1 < h && buckets[current.x][current.y+1] === 0)
