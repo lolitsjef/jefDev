@@ -93,7 +93,6 @@ function App() {
     if(!toVisit.isEmpty() && solve && !solved)
     {
       let current = toVisit.pop();
-      solve = false;
 
       //check down
       if(current.y + 1 < h && buckets[current.x][current.y+1] === 0)
@@ -335,7 +334,7 @@ function App() {
           {/* Links */}
           <section>
           <wired-card>
-            <wired-link href="">Source Code</wired-link>
+            <wired-link href="https://github.com/lolitsjef/jefDev/blob/main/src/MazeSolver.js">Source Code</wired-link>
           </wired-card>
           <wired-card>
             <wired-link href="">YouTube Video</wired-link>
